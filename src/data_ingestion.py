@@ -67,7 +67,7 @@ def save_data(train_data,test_data,data_path):
 def main():
     try:
         test_size=.2
-        data_path="https://raw.githubusercontent.com/PrantoMondol11/ML-DVC-Pipeline/refs/heads/main/experiment/spam.csv"
+        data_path="https://raw.githubusercontent.com/PrantoMondol11/ML-DVC-Pipeline/refs/heads/main/experiment/spam%20.csv"
         df=load_data(data_url=data_path)
         final_df=preprocess_data(df)
         train_data,test_data=train_test_split(final_df,test_size=test_size,random_state=2)
