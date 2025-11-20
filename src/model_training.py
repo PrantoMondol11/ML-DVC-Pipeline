@@ -9,10 +9,10 @@ from sklearn.ensemble import RandomForestClassifier
 
 log_dir="logs"
 os.makedirs(log_dir,exist_ok=True)
-logger=logging.getLogger("feature_engineering.log")
+logger=logging.getLogger("model_training")
 logger.setLevel("DEBUG")
 
-file_log_path=os.path.join(log_dir,"feature_engineering.log")
+file_log_path=os.path.join(log_dir,"model_traing.log")
 file_handler=logging.FileHandler(file_log_path)
 file_handler.setLevel("DEBUG")
 
