@@ -2,7 +2,7 @@ import os
 import pandas as pd
 import logging
 from sklearn.feature_extraction.text import TfidfVectorizer
-
+import yaml
 log_dir="logs"
 os.makedirs(log_dir,exist_ok=True)
 logger=logging.getLogger("feature_engineering.log")
@@ -23,6 +23,23 @@ file_handler.setFormatter(formattor)
 logger.addHandler(console_handler)
 logger.addHandler(file_handler)
 
+
+
+def load_params(file_path:str):
+    try:
+        with open(file_path,'r') as file:
+            params=yaml.safe_load(file)
+            logger.debug("Parameter retrived from %s",file_path)
+            return params
+    except FileNotFoundError as e:
+        logger.error("File not found : %s",e)
+        raise
+    except yaml.YAMLError as e:
+        logger.error("YAML error: %s",e)
+        raise
+    except Exception as e:
+        logger.error("Unexpected error:%s",e)
+        raise
 
 def load_data(file_path):
     try:
@@ -72,7 +89,8 @@ def save_data(df,file_path):
 def main():
     try:
         
-        max_feature=50
+        params=load_params(file_path='params.yaml')
+        max_feature=params['feature_engineering']['max_feature']
         
         train_data=load_data('./data/interim/train_processed.csv')
         test_data=load_data("./data/interim/test_processed.csv")

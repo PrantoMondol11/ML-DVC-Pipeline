@@ -3,6 +3,7 @@ import os
 import pandas as pd
 from sklearn.model_selection import train_test_split
 import logging
+import yaml
 
 
 logdir='logs'
@@ -26,6 +27,22 @@ file_handler.setFormatter(formatter)
 
 logger.addHandler(console_handler)
 logger.addHandler(file_handler)
+
+def load_params(file_path:str):
+    try:
+        with open(file_path,'r') as file:
+            params=yaml.safe_load(file)
+            logger.debug("Parameter retrived from %s",file_path)
+            return params
+    except FileNotFoundError as e:
+        logger.error("File not found : %s",e)
+        raise
+    except yaml.YAMLError as e:
+        logger.error("YAML error: %s",e)
+        raise
+    except Exception as e:
+        logger.error("Unexpected error:%s",e)
+        raise
 
 def load_data(data_url):
     try:
@@ -66,7 +83,8 @@ def save_data(train_data,test_data,data_path):
 
 def main():
     try:
-        test_size=.2
+        params=load_params(file_path='params.yaml')
+        test_size=params['data_ingestion']['test_size']
         data_path="https://raw.githubusercontent.com/PrantoMondol11/ML-DVC-Pipeline/refs/heads/main/experiment/spam%20.csv"
         df=load_data(data_url=data_path)
         final_df=preprocess_data(df)
